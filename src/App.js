@@ -1,14 +1,18 @@
-import logo from './logo.svg'
 import './App.css'
+import Header from './components/Header/header'
+import Layout from './components/Layout/layout'
+import Footer from './components/Footer/footer'
+import LayoutBg from './assets/bgSleepingPika.jpg'
 
 function App() {
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <p>Gamar jobat!</p>
-            </header>
-        </div>
+        <>
+            <Header />
+            <Layout urlBg={LayoutBg} />
+            <Layout colorBg='purple' />
+            <Layout urlBg={LayoutBg} />
+            <Footer />
+        </>
     )
 }
 
