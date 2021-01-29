@@ -16,7 +16,8 @@ body {
 
 body {
     color: #252934;
-    background: #fafafa;
+    /*background: #fafafa;*/
+    background: #252934;
     font-size: 62.5%;
     font-family: 'Overlock', Arial, Helvetica, sans-serif;
     overflow-x: hidden;
