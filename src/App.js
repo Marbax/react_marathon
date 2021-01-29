@@ -1,7 +1,7 @@
 import './App.css'
-import Header from './components/Header/header'
-import Layout from './components/Layout/layout'
-import Footer from './components/Footer/footer'
+import Header from './components/Header'
+import Layout from './components/Layout'
+import Footer from './components/Footer'
 import LayoutBg from './assets/bgSleepingPika.jpg'
 
 function App() {
