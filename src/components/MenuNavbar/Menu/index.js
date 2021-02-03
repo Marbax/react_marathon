@@ -3,23 +3,23 @@ import cn from 'classnames'
 
 import style from './style.module.css'
 
-const Menu = ({ menuActive, handleLinkClick }) => {
-    const PAGES = [
-        { path: '/', name: 'HOME' },
-        { path: '/game', name: 'GAME' },
-        { path: '/about', name: 'ABOUT' },
-        { path: '/contact', name: 'CONTACT' },
-    ]
+const PAGES = [
+    { path: '/', name: 'HOME' },
+    { path: '/game', name: 'GAME' },
+    { path: '/about', name: 'ABOUT' },
+    { path: '/contact', name: 'CONTACT' },
+]
 
+const Menu = ({ isMenuActive, handleLinkClick }) => {
     return (
-        <div className={cn(style['menu-container'], menuActive ? style.active : style.deactive)}>
+        <div className={cn(style['menu-container'], { [style.active]: isMenuActive === true, [style.deactive]: isMenuActive === false })}>
             <div className={style.overlay} />
             <div className={style['menu-items']}>
                 <ul>
-                    {PAGES.map((i) => (
-                        <li key={i.name}>
-                            <NavLink exact to={i.path} activeClassName={style.active} className={style['nav-link']} onClick={handleLinkClick}>
-                                {i.name}
+                    {PAGES.map(({ path, name }) => (
+                        <li key={name}>
+                            <NavLink exact to={path} activeClassName={style.active} className={style['nav-link']} onClick={handleLinkClick}>
+                                {name}
                             </NavLink>
                         </li>
                     ))}
