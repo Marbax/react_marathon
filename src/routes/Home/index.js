@@ -5,7 +5,6 @@ import PokemonCard from '../../components/PokemonCard'
 
 import style from './style.module.css'
 import LayoutBg from '../../assets/bgSleepingPika.jpg'
-import CardBg from '../../assets/card-back-side.jpg'
 
 import PokemonsSourceFile from '../../assets/PokemonCards.json'
 
@@ -30,7 +29,7 @@ function HomePage() {
             <Layout id='cards' title='Cards to choose.' colorBg='orange'>
                 <div className={style.flex}>
                     {POKEMONS.map((item) => (
-                        <PokemonCard key={`${item.id}`} {...item} bgImg={CardBg} />
+                        <PokemonCard key={`${item.id}`} {...item} />
                     ))}
                 </div>
             </Layout>
