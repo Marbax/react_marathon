@@ -3,15 +3,15 @@ import { useState } from 'react'
 import Menu from './Menu'
 import Navbar from './Navbar'
 
-const MenuNavbar = () => {
-    const [menuActive, setMenuActive] = useState(false)
+const MenuNavbar = ({ bgActive }) => {
+    const [isMenuActive, setMenuActive] = useState(null)
 
     const handleBurgerClick = () => setMenuActive((s) => !s)
 
     return (
         <>
-            <Navbar menuActive={menuActive} handleBurgerClick={handleBurgerClick} />
-            <Menu menuActive={menuActive} handleLinkClick={handleBurgerClick} />
+            <Navbar isBgActive={bgActive} isMenuActive={isMenuActive} handleBurgerClick={handleBurgerClick} />
+            <Menu isMenuActive={isMenuActive} handleLinkClick={handleBurgerClick} />
         </>
     )
 }

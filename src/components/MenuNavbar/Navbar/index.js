@@ -2,12 +2,12 @@ import cn from 'classnames'
 
 import style from './style.module.css'
 
-const Navbar = ({ handleBurgerClick, menuActive }) => {
+const Navbar = ({ handleBurgerClick, isMenuActive, isBgActive }) => {
     return (
-        <nav id={style.navbar} className={!menuActive && style['bg-active']}>
+        <nav id={style.navbar} className={isBgActive && style['bg-active']}>
             <div className={style['nav-wrapper']}>
                 <p className={style.brand}>Mbx</p>
-                <span onClick={handleBurgerClick} className={cn(style['menu-button'], menuActive && style.active)}>
+                <span onClick={handleBurgerClick} className={cn(style['menu-button'], isMenuActive && style.active)}>
                     <span />
                 </span>
             </div>

@@ -1,13 +1,11 @@
-import { useState } from 'react'
 import cn from 'classnames'
 
 import style from './style.module.css'
+import defCardBg from '../../assets/card-back-side.jpg'
 
-const PokemonCard = ({ id, abilities, stats, type, img, name, base_experiencem, height, values, bgImg }) => {
-    const [isActive, setActive] = useState(false)
-
+const PokemonCard = ({ id, abilities, stats, type, img, name, base_experiencem, height, values, bgImg, onClick, isActive }) => {
     const handleClick = () => {
-        setActive(!isActive)
+        onClick && onClick(id)
     }
 
     return (
@@ -38,7 +36,7 @@ const PokemonCard = ({ id, abilities, stats, type, img, name, base_experiencem, 
 
                 <div className={style.cardBack}>
                     <div className={cn(style.wrap, style.back)}>
-                        <img src={bgImg} alt='Сard Backed' />
+                        <img src={bgImg ? bgImg : defCardBg} alt='Сard Backed' />
                     </div>
                 </div>
             </div>
