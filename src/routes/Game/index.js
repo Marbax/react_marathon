@@ -7,13 +7,8 @@ import style from './style.module.css'
 const GamePage = ({ pokemons }) => {
     const [pokemonsArr, SetPokemonsArr] = useState(pokemons)
 
-    const handleCardClick = (cardId) => {
-        SetPokemonsArr((state) => {
-            const index = state.findIndex((item) => item.id === cardId)
-            const oldItem = state[index]
-            const newitem = { ...oldItem, isActive: !oldItem.isActive }
-            return [...state.slice(0, index), newitem, ...state.slice(index + 1)]
-        })
+    const handleCardClick = (pokemonId) => {
+        SetPokemonsArr((state) => state.map((item) => (item.id === pokemonId ? { ...item, isActive: !item.isActive } : item)))
     }
 
     return (
