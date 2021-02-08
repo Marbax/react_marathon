@@ -7,10 +7,7 @@ import AboutPage from './routes/About'
 import ContactPage from './routes/Contact'
 import NotFound from './routes/NotFound'
 
-import PokemonsSourceFile from './assets/PokemonCards.json'
-
 const App = () => {
-    const POKEMONS = PokemonsSourceFile
     const isRoot = useRouteMatch('/')
     return (
         <Switch>
@@ -22,7 +19,7 @@ const App = () => {
                         <Route exact path='/' component={HomePage}></Route>
                         <Route path='/home' component={HomePage}></Route>
                         <Route path='/game'>
-                            <GamePage pokemons={POKEMONS} />
+                            <GamePage />
                         </Route>
                         <Route path='/about' component={AboutPage} />
                         <Route path='/contact' component={ContactPage} />
