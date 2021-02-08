@@ -11,44 +11,54 @@ const GamePage = () => {
     const [pokemons, SetPokemons] = useState({})
 
     const handleCardClick = (pokemonId) => {
-        SetPokemons((prevState) => {
-            return Object.entries(prevState).reduce((acc, item) => {
-                const pokemon = { ...item[1] }
-                if (pokemon.id === pokemonId) {
-                    pokemon.active = !pokemon.active
-                    database.ref('pokemons/' + item[0]).set({
+        Object.entries(pokemons).reduce((acc, item) => {
+            const pokemon = { ...item[1] }
+            if (pokemon.id === pokemonId) {
+                pokemon.active = !pokemon.active
+                database
+                    .ref('pokemons/' + item[0])
+                    .set({
                         ...pokemon,
                     })
-                }
+                    .then(() => {
+                        SetPokemons((prevState) => {
+                            return { ...prevState, [item[0]]: pokemon }
+                        })
+                    })
 
-                acc[item[0]] = pokemon
-
-                return acc
-            }, {})
-        })
+                return null
+            }
+            return null
+        }, {})
     }
 
     const handleAddPokeClick = () => {
         const newPostKey = database.ref().child('pokemons').push().key
-        const newPoke = Object.entries(pokemons)[0][1]
+        const newPoke = { ...Object.entries(pokemons)[0][1] }
         //TODO: remove
         //TEMP id gen
-        newPoke.id = Object.entries(pokemons).reduce((max, item) => (item[1].id > max ? item[1].id : max), Object.entries(pokemons)[0][1].id) + 1
+        newPoke.id = Object.entries(pokemons).reduce((max, item) => (item[1].id > max ? item[1].id : max), Object.entries(pokemons)[0][1].id)
+        newPoke.id++
         newPoke.active = false
         //TEMP
-        database.ref('pokemons/' + newPostKey).set(newPoke)
-
-        getAll()
+        database
+            .ref('pokemons/' + newPostKey)
+            .set(newPoke)
+            .then(() => {
+                SetPokemons((prevState) => {
+                    return { ...prevState, [newPostKey]: newPoke }
+                })
+            })
     }
 
-    const getAll = () => {
+    const syncStateWithDatabase = () => {
         database.ref('pokemons').once('value', (snapshot) => {
             SetPokemons(snapshot.val())
         })
     }
 
     useEffect(() => {
-        getAll()
+        syncStateWithDatabase()
     }, [])
 
     return (
