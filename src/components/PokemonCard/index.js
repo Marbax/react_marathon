@@ -3,7 +3,7 @@ import cn from 'classnames'
 import style from './style.module.css'
 import defCardBg from '../../assets/card-back-side.jpg'
 
-const PokemonCard = ({ id, abilities, stats, type, img, name, base_experiencem, height, values, bgImg, onClick, isActive }) => {
+const PokemonCard = ({ id, type, img, name, values, bgImg, onClick, isActive }) => {
     const handleClick = () => {
         onClick && onClick(id)
     }

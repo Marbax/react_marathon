@@ -1,19 +1,14 @@
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import Footer from '../../components/Footer'
-import PokemonCard from '../../components/PokemonCard'
 
-import style from './style.module.css'
 import LayoutBg from '../../assets/bgSleepingPika.jpg'
 
-import PokemonsSourceFile from '../../assets/PokemonCards.json'
-
 function HomePage() {
-    const POKEMONS = PokemonsSourceFile
     return (
         <>
             <Header title='Pokemon card game.' descr='Simple triple triad card game.' />
-            <Layout id='rules' title='Game rules.' urlBg={LayoutBg}>
+            <Layout id={'rules'} title='Game rules.' urlBg={LayoutBg}>
                 <p>
                     In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.
                     <br />
@@ -26,14 +21,7 @@ function HomePage() {
                     into the player's color instead.{' '}
                 </p>
             </Layout>
-            <Layout id='cards' title='Cards to choose.' colorBg='orange'>
-                <div className={style.flex}>
-                    {POKEMONS.map((item) => (
-                        <PokemonCard key={`${item.id}`} {...item} />
-                    ))}
-                </div>
-            </Layout>
-            <Layout id='about' title='Credentials.' urlBg={LayoutBg}></Layout>
+            <Layout id={'about'} title='Credentials.' urlBg={LayoutBg}></Layout>
             <Footer />
         </>
     )
