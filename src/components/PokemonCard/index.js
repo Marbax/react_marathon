@@ -3,17 +3,17 @@ import cn from 'classnames'
 import style from './style.module.css'
 import defCardBg from '../../assets/card-back-side.jpg'
 
-const PokemonCard = ({ id, type, img, name, values, bgImg, onClick, isActive }) => {
+const PokemonCard = ({ id, type, img, name, values, bgImg, onClick, isActive, isSelected, minimize, className }) => {
     const handleClick = () => {
         onClick && onClick(id)
     }
 
     return (
-        <div className={style.root} onClick={handleClick}>
-            <div className={cn(style.pokemonCard, { [style.active]: isActive })}>
+        <div className={cn(className, style.root)} onClick={handleClick}>
+            <div className={cn(style.pokemonCard, { [style.active]: isActive }, { [style.selected]: isSelected })}>
                 <div className={style.cardFront}>
-                    <div className={`${style.wrap} ${style.front}`}>
-                        <div className={`${style.pokemon} ${style[type]}`}>
+                    <div className={cn(style.wrap, style.front)}>
+                        <div className={cn(style.pokemon, style[type])}>
                             <div className={style.values}>
                                 <div className={cn(style.count, style.top)}>{values.top}</div>
                                 <div className={cn(style.count, style.right)}>{values.right}</div>
@@ -23,13 +23,15 @@ const PokemonCard = ({ id, type, img, name, values, bgImg, onClick, isActive }) 
                             <div className={style.imgContainer}>
                                 <img src={img} alt={name} />
                             </div>
-                            <div className={style.info}>
-                                <span className={style.number}>#{id}</span>
-                                <h3 className={style.name}>{name}</h3>
-                                <small className={style.type}>
-                                    Type: <span>{type}</span>
-                                </small>
-                            </div>
+                            {!minimize && (
+                                <div className={style.info}>
+                                    <span className={style.number}>#{id}</span>
+                                    <h3 className={style.name}>{name}</h3>
+                                    <small className={style.type}>
+                                        Type: <span>{type}</span>
+                                    </small>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
