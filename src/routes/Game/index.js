@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouteMatch, Switch, Route, useHistory } from 'react-router-dom'
 import { PokemonContext } from '../../context/pokemonContext'
-import database from '../../services/firebase'
+import { DatabaseContext } from '../../context/databaseContext'
 
 import StartPage from './Start'
 import BoardPage from './Board'
@@ -12,6 +12,7 @@ const GamePage = () => {
     const [pokemonsSelected, SetPokemonsSelected] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
+    const firebase = useContext(DatabaseContext)
 
     const handleGameStartClick = () => {
         history.push('/game/board')
@@ -41,14 +42,8 @@ const GamePage = () => {
         }, {})
     }
 
-    const syncStateWithDatabase = () => {
-        database.ref('pokemons').once('value', (snapshot) => {
-            SetPokemons(snapshot.val())
-        })
-    }
-
     useEffect(() => {
-        syncStateWithDatabase()
+        firebase.getPokemonsSocket((pokes) => SetPokemons(pokes))
     }, [])
 
     return (
