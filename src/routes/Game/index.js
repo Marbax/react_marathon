@@ -8,11 +8,11 @@ import BoardPage from './Board'
 import FinishPage from './Finish'
 
 const GamePage = () => {
+    const firebase = useContext(DatabaseContext)
     const [pokemons, SetPokemons] = useState({})
     const [pokemonsSelected, SetPokemonsSelected] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
-    const firebase = useContext(DatabaseContext)
 
     const handleGameStartClick = () => {
         history.push('/game/board')
@@ -43,7 +43,10 @@ const GamePage = () => {
     }
 
     useEffect(() => {
-        firebase.getPokemonsSocket((pokes) => SetPokemons(pokes))
+        firebase.getPokemonsSocket((pokes) => {
+            SetPokemons(pokes)
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
