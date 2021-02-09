@@ -3,7 +3,7 @@ import style from './style.module.css'
 const FinishPage = () => {
     return (
         <>
-            <h1>Finish</h1>
+            <h1 className={style.plug}>Finish</h1>
             <div></div>
         </>
     )
