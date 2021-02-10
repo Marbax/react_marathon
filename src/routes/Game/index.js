@@ -46,6 +46,7 @@ const GamePage = () => {
         firebase.getPokemonsSocket((pokes) => {
             SetPokemons(pokes)
         })
+        return () => firebase.offPokemonsSocket()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
