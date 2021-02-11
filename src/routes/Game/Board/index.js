@@ -4,16 +4,17 @@ import PokemonCard from '../../../components/PokemonCard'
 import { PokemonContext } from '../../../context/pokemonContext'
 import style from './style.module.css'
 
+// TODO: in refresh board
+//Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+
 const BoardPage = () => {
     const history = useHistory()
-    //    if (Object.keys(pokemonsSelected).length < 1) {
-    //        history.replace('/game')
-    //    }
-
+    const { pokemonsSelected } = useContext(PokemonContext)
+    if (Object.keys(pokemonsSelected).length < 1) {
+        history.replace('/game')
+    }
     const [board, SetBoard] = useState([])
     const [oponent, setOponent] = useState([])
-
-    const { pokemonsSelected } = useContext(PokemonContext)
 
     const syncBoard = async () => {
         const boardResp = await fetch('https://reactmarathon-api.netlify.app/api/board')
