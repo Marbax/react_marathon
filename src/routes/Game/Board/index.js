@@ -1,15 +1,40 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import PokemonCard from '../../../components/PokemonCard'
 import { PokemonContext } from '../../../context/pokemonContext'
 import style from './style.module.css'
 
 const BoardPage = () => {
-    const { pokemonsSelected } = useContext(PokemonContext)
     const history = useHistory()
+    //    if (Object.keys(pokemonsSelected).length < 1) {
+    //        history.replace('/game')
+    //    }
 
-    if (Object.keys(pokemonsSelected).length < 1) {
-        history.replace('/game')
+    const [board, SetBoard] = useState([])
+    const [oponent, setOponent] = useState([])
+
+    const { pokemonsSelected } = useContext(PokemonContext)
+
+    const syncBoard = async () => {
+        const boardResp = await fetch('https://reactmarathon-api.netlify.app/api/board')
+        const boardData = await boardResp.json()
+        SetBoard(boardData.data)
+    }
+
+    const initOponent = async () => {
+        const oponentResp = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
+        const oponentData = await oponentResp.json()
+        setOponent(oponentData.data)
+    }
+
+    useEffect(() => {
+        syncBoard()
+
+        initOponent()
+    }, [])
+
+    const handleBoardPlateClick = (position) => {
+        console.log(position)
     }
 
     return (
@@ -34,15 +59,33 @@ const BoardPage = () => {
                     ))}
             </div>
             <div className={style.board}>
-                <div className={style.boardPlate}>1</div>
-                <div className={style.boardPlate}>2</div>
-                <div className={style.boardPlate}>3</div>
-                <div className={style.boardPlate}>4</div>
-                <div className={style.boardPlate}>5</div>
-                <div className={style.boardPlate}>6</div>
-                <div className={style.boardPlate}>7</div>
-                <div className={style.boardPlate}>8</div>
-                <div className={style.boardPlate}>9</div>
+                {board &&
+                    board.map((item) => {
+                        return (
+                            <div className={style.boardPlate} key={item.position} onClick={() => !item.card && handleBoardPlateClick(item.position)}>
+                                {item.card && <PokemonCard {...item} minimize />}
+                            </div>
+                        )
+                    })}
+            </div>
+            <div className={style.playerTwo}>
+                {oponent &&
+                    oponent.map(({ id, type, img, name, values, bgImg }, index) => (
+                        <PokemonCard
+                            key={`${id}-${index}`}
+                            id={id}
+                            type={type}
+                            img={img}
+                            name={name}
+                            values={values}
+                            bgImg={bgImg}
+                            isActive={true}
+                            minimize={true}
+                            isSelected={false}
+                            className={style.card}
+                            onClick={() => console.log('clicked')}
+                        />
+                    ))}
             </div>
         </div>
     )
