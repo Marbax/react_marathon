@@ -3,9 +3,9 @@ import cn from 'classnames'
 import style from './style.module.css'
 import defCardBg from '../../assets/card-back-side.jpg'
 
-const PokemonCard = ({ id, type, img, name, values, bgImg, onClick, isActive, isSelected, minimize, className }) => {
+const PokemonCard = ({ outerKey, id, type, img, name, values, bgImg, onClick, isActive, isSelected, minimize, className }) => {
     const handleClick = () => {
-        onClick && onClick(id)
+        onClick && onClick(outerKey)
     }
 
     return (
