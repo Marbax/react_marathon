@@ -9,16 +9,24 @@ import FinishPage from './Finish'
 
 const GamePage = () => {
     const firebase = useContext(DatabaseContext)
+    const [isGameFinished, SetGameFinished] = useState(false)
+    const [isPlayerWon, SetPlayerWon] = useState(false)
     const [pokemons, SetPokemons] = useState({})
     const [pokemonsSelected, SetPokemonsSelected] = useState({})
+    const [oponetsHand, SetOponetsHand] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
 
-    const handleGameStartClick = () => {
+    const startGame = () => {
         history.push('/game/board')
     }
 
-    const handleCardClick = (outerKey) => {
+    const goToFinishPage = () => {
+        SetGameFinished(true)
+        history.push('/game/finish')
+    }
+
+    const selectPokemon = (outerKey) => {
         if (Object.keys(pokemonsSelected).length < 5 || pokemons[outerKey].isSelected) {
             const pokemon = { ...pokemons[outerKey] }
 
@@ -37,18 +45,47 @@ const GamePage = () => {
         }
     }
 
+    const endGame = (card) => {
+        if (card) {
+            const pokeToAdd = { ...card }
+            delete pokeToAdd.isSelected
+            firebase.addPokemon(pokeToAdd)
+        }
+        history.replace('/game')
+        resetData()
+    }
+
+    const makePlayerWon = () => {
+        SetPlayerWon(true)
+    }
+
+    const initOponent = async () => {
+        const oponentResp = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
+        const oponentData = await oponentResp.json()
+        SetOponetsHand(oponentData.data.map((item) => ({ ...item, possession: 'red' })))
+    }
+
+    const resetData = async () => {
+        SetPokemons(await firebase.getPokemonsOnceAsync())
+        SetPokemonsSelected({})
+        SetGameFinished(false)
+        SetPlayerWon(false)
+        initOponent()
+    }
+
     useEffect(() => {
         firebase.getPokemonsSocket((pokes) => {
             SetPokemons(pokes)
         })
+        resetData()
         return () => firebase.offPokemonsSocket()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
-        <PokemonContext.Provider value={{ handleCardClick, handleGameStartClick, pokemons, pokemonsSelected }}>
+        <PokemonContext.Provider value={{ pokemons, pokemonsSelected, oponetsHand, isGameFinished, isPlayerWon, goToFinishPage, endGame, makePlayerWon, selectPokemon, startGame }}>
             <Switch>
-                <Route path={`${match.path}/`} exact component={StartPage} />
+                <Route exact path={`${match.path}/`} component={StartPage} />
                 <Route path={`${match.path}/board`} component={BoardPage} />
                 <Route path={`${match.path}/finish`} component={FinishPage} />
             </Switch>
