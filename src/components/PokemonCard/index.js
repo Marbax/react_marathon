@@ -9,7 +9,7 @@ const PokemonCard = ({ outerKey, id, type, img, name, values, bgImg, onClick, is
     }
 
     return (
-        <div className={cn(className)} onClick={!isDisabled && handleClick}>
+        <div className={cn(className)} onClick={!isDisabled ? handleClick : null}>
             <div className={cn(style.pokemonCard, { [style.disabled]: isDisabled }, { [style.active]: isActive }, { [style.selected]: isSelected })}>
                 <div className={style.cardFront}>
                     <div className={cn(style.wrap, style.front)}>
