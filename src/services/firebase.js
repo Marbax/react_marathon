@@ -43,7 +43,7 @@ class FirebaseService {
             .ref(`pokemons/${newPostKey}`)
             .set(poke)
             .then(() => {
-                cb()
+                cb && cb()
             })
     }
 }
