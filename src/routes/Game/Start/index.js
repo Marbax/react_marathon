@@ -6,6 +6,7 @@ import LayoutBg from '../../../assets/bgSleepingPika.jpg'
 
 import style from './style.module.css'
 import { PokemonContext } from '../../../context/pokemonContext'
+import PokeballLoader from '../../../components/PokeballLoader'
 
 const GamePage = () => {
     const { startGame, selectPokemon, pokemonsSelected, pokemons } = useContext(PokemonContext)
@@ -25,7 +26,7 @@ const GamePage = () => {
                     Start Game
                 </button>
                 <div className={style['card-container']}>
-                    {pokemons &&
+                    {Object.entries(pokemons).length > 0 ? (
                         Object.entries(pokemons).map(([key, { id, type, img, name, values, bgImg, isSelected }]) => (
                             <PokemonCard
                                 key={key}
@@ -41,7 +42,10 @@ const GamePage = () => {
                                 className={style['large-card']}
                                 onClick={handleSelectPokemonClick}
                             />
-                        ))}
+                        ))
+                    ) : (
+                        <PokeballLoader />
+                    )}
                 </div>
             </Layout>
         </>
