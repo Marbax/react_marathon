@@ -3,14 +3,14 @@ import cn from 'classnames'
 import style from './style.module.css'
 import defCardBg from '../../assets/card-back-side.jpg'
 
-const PokemonCard = ({ outerKey, id, type, img, name, values, bgImg, onClick, isActive, isSelected, minimize, className, possession }) => {
+const PokemonCard = ({ outerKey, id, type, img, name, values, bgImg, onClick, isActive, isSelected, minimize, className, possession, isDisabled = false }) => {
     const handleClick = () => {
         onClick && onClick(outerKey)
     }
 
     return (
-        <div className={cn(className)} onClick={handleClick}>
-            <div className={cn(style.pokemonCard, { [style.active]: isActive }, { [style.selected]: isSelected })}>
+        <div className={cn(className)} onClick={!isDisabled && handleClick}>
+            <div className={cn(style.pokemonCard, { [style.disabled]: isDisabled }, { [style.active]: isActive }, { [style.selected]: isSelected })}>
                 <div className={style.cardFront}>
                     <div className={cn(style.wrap, style.front)}>
                         <div className={cn(style.pokemon, style[type], style[possession])}>

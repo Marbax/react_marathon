@@ -20,7 +20,7 @@ const GamePage = () => {
 
     return (
         <>
-            <Layout urlBg={LayoutBg}>
+            <Layout urlBg={LayoutBg} title={'Choose your cards'}>
                 <button className={style['start-button']} disabled={Object.keys(pokemonsSelected).length < 5} onClick={handleGameStartClick}>
                     Start Game
                 </button>

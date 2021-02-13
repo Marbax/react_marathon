@@ -21,6 +21,7 @@ const PlayerBoard = ({ player, isMoving, cards, className, onCardClick }) => {
                         <PokemonCard
                             key={`${item.id}-${index}`}
                             id={item.id}
+                            isDisabled={!isMoving}
                             type={item.type}
                             img={item.img}
                             name={item.name}
