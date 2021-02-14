@@ -9,50 +9,83 @@ import FinishPage from './Finish'
 
 const GamePage = () => {
     const firebase = useContext(DatabaseContext)
+    const [isGameFinished, SetGameFinished] = useState(false)
+    const [isPlayerWon, SetPlayerWon] = useState(false)
     const [pokemons, SetPokemons] = useState({})
-    const [pokemonsSelected, SetPokemonsSelected] = useState([])
+    const [pokemonsSelected, SetPokemonsSelected] = useState({})
+    const [oponetsHand, SetOponetsHand] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
 
-    const handleGameStartClick = () => {
+    const startGame = () => {
         history.push('/game/board')
     }
 
-    const handleCardClick = (pokemonId) => {
-        Object.entries(pokemons).reduce((acc, item) => {
-            if (item[1].id === pokemonId) {
-                const pokemon = { ...item[1] }
-                if (pokemonsSelected.length < 5 && !pokemonsSelected.some((i) => i.id === pokemonId)) {
-                    pokemon.isSelected = !pokemon.isSelected
-                    SetPokemons((prevState) => {
-                        return { ...prevState, [item[0]]: pokemon }
-                    })
-                    SetPokemonsSelected((prevState) => {
-                        return [...prevState, { ...pokemon }]
-                    })
-                } else if (pokemonsSelected.length > 0 && pokemonsSelected.some((i) => i.id === pokemonId)) {
-                    pokemon.isSelected = !pokemon.isSelected
-                    SetPokemons((prevState) => {
-                        return { ...prevState, [item[0]]: pokemon }
-                    })
-                    SetPokemonsSelected((prevState) => prevState.filter((i) => i.id !== pokemonId))
+    const goToFinishPage = () => {
+        SetGameFinished(true)
+        history.push('/game/finish')
+    }
+
+    const selectPokemon = (outerKey) => {
+        if (Object.keys(pokemonsSelected).length < 5 || pokemons[outerKey].isSelected) {
+            const pokemon = { ...pokemons[outerKey] }
+
+            SetPokemons((prevState) => {
+                return { ...prevState, [outerKey]: { ...prevState[outerKey], isSelected: !prevState[outerKey].isSelected } }
+            })
+
+            SetPokemonsSelected((prevState) => {
+                if (prevState[outerKey]) {
+                    const copiedState = { ...prevState }
+                    delete copiedState[outerKey]
+                    return copiedState
                 }
-            }
-            return null
-        }, {})
+                return { ...prevState, [outerKey]: pokemon }
+            })
+        }
+    }
+
+    const endGame = (card) => {
+        if (card) {
+            const pokeToAdd = { ...card }
+            delete pokeToAdd.isSelected
+            firebase.addPokemon(pokeToAdd)
+        }
+        history.replace('/game')
+        resetData()
+    }
+
+    const makePlayerWon = () => {
+        SetPlayerWon(true)
+    }
+
+    const initOponent = async () => {
+        const oponentResp = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
+        const oponentData = await oponentResp.json()
+        SetOponetsHand(oponentData.data.map((item) => ({ ...item, possession: 'red' })))
+    }
+
+    const resetData = async () => {
+        SetPokemons(await firebase.getPokemonsOnceAsync())
+        SetPokemonsSelected({})
+        SetGameFinished(false)
+        SetPlayerWon(false)
+        initOponent()
     }
 
     useEffect(() => {
         firebase.getPokemonsSocket((pokes) => {
             SetPokemons(pokes)
         })
+        resetData()
+        return () => firebase.offPokemonsSocket()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
-        <PokemonContext.Provider value={{ handleCardClick, handleGameStartClick, pokemons, pokemonsSelected }}>
+        <PokemonContext.Provider value={{ pokemons, pokemonsSelected, oponetsHand, isGameFinished, isPlayerWon, goToFinishPage, endGame, makePlayerWon, selectPokemon, startGame }}>
             <Switch>
-                <Route path={`${match.path}/`} exact component={StartPage} />
+                <Route exact path={`${match.path}/`} component={StartPage} />
                 <Route path={`${match.path}/board`} component={BoardPage} />
                 <Route path={`${match.path}/finish`} component={FinishPage} />
             </Switch>

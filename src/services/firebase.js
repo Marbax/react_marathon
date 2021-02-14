@@ -10,20 +10,20 @@ const firebaseConfig = {
     messagingSenderId: '564953470709',
     appId: '1:564953470709:web:842aec4a99b8823a62d7bc',
 }
+firebase.initializeApp(firebaseConfig)
 
 class FirebaseService {
     constructor() {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig)
-        } else {
-            firebase.app()
-        }
         this.fire = firebase
         this.database = this.fire.database()
     }
 
     getPokemonsSocket = (cb) => {
         this.database.ref('pokemons').on('value', (snapshot) => cb(snapshot.val()))
+    }
+
+    offPokemonsSocket = () => {
+        this.database.ref('pokemons').off()
     }
 
     getPokemonsOnceAsync = async () => {
@@ -43,7 +43,7 @@ class FirebaseService {
             .ref(`pokemons/${newPostKey}`)
             .set(poke)
             .then(() => {
-                cb()
+                cb && cb()
             })
     }
 }

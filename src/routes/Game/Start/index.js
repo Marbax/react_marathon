@@ -6,25 +6,31 @@ import LayoutBg from '../../../assets/bgSleepingPika.jpg'
 
 import style from './style.module.css'
 import { PokemonContext } from '../../../context/pokemonContext'
+import PokeballLoader from '../../../components/PokeballLoader'
 
 const GamePage = () => {
-    const resources = useContext(PokemonContext)
+    const { startGame, selectPokemon, pokemonsSelected, pokemons } = useContext(PokemonContext)
 
     const handleGameStartClick = () => {
-        resources.handleGameStartClick && resources.handleGameStartClick()
+        startGame && startGame()
+    }
+
+    const handleSelectPokemonClick = (key) => {
+        selectPokemon && selectPokemon(key)
     }
 
     return (
         <>
-            <Layout urlBg={LayoutBg}>
-                <button className={style['start-button']} disabled={resources.pokemonsSelected.length < 5} onClick={handleGameStartClick}>
+            <Layout urlBg={LayoutBg} title={'Choose your cards'}>
+                <button className={style['start-button']} disabled={Object.keys(pokemonsSelected).length < 5} onClick={handleGameStartClick}>
                     Start Game
                 </button>
                 <div className={style['card-container']}>
-                    {resources.pokemons &&
-                        Object.entries(resources.pokemons).map(([key, { id, type, img, name, values, bgImg, isSelected }]) => (
+                    {Object.entries(pokemons).length > 0 ? (
+                        Object.entries(pokemons).map(([key, { id, type, img, name, values, bgImg, isSelected }]) => (
                             <PokemonCard
                                 key={key}
+                                outerKey={key}
                                 id={id}
                                 type={type}
                                 img={img}
@@ -34,9 +40,12 @@ const GamePage = () => {
                                 isActive={true}
                                 isSelected={isSelected}
                                 className={style['large-card']}
-                                onClick={resources.handleCardClick}
+                                onClick={handleSelectPokemonClick}
                             />
-                        ))}
+                        ))
+                    ) : (
+                        <PokeballLoader />
+                    )}
                 </div>
             </Layout>
         </>
