@@ -25,7 +25,7 @@ const GamePage = () => {
 
     return (
         <>
-            <Layout urlBg={LayoutBg} title={'Choose your cards'}>
+            <Layout urlBg={LayoutBg} title={'Choose your cards'} isPololygonDisabled={true}>
                 <button className={style['start-button']} disabled={Object.keys(pokemonsSelected).length < 5} onClick={handleGameStartClick}>
                     Start Game
                 </button>

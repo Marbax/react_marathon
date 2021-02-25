@@ -2,9 +2,9 @@ import cn from 'classnames'
 
 import style from './style.module.css'
 
-const Layout = ({ id, title, descr, urlBg, colorBg, children }) => {
+const Layout = ({ id, title, descr, urlBg, colorBg, children, isPololygonDisabled }) => {
     return (
-        <section className={style.root} id={id}>
+        <section className={cn(style.root, { [style.disPoly]: isPololygonDisabled })} id={id}>
             <div className={style.root} style={{ backgroundImage: urlBg && `url('${urlBg}')`, backgroundColor: colorBg }}>
                 <article>
                     <div className={style.title}>
