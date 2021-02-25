@@ -1,6 +1,5 @@
 import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
 
-import FirebaseService from './services/firebase'
 import { DatabaseContext } from './context/databaseContext'
 import MenuNavbar from './components/MenuNavbar'
 import HomePage from './routes/Home'
@@ -8,11 +7,12 @@ import GamePage from './routes/Game'
 import AboutPage from './routes/About'
 import ContactPage from './routes/Contact'
 import NotFound from './routes/NotFound'
+import FirebaseClass from './services/firebase'
 
 const App = () => {
     const isRoot = useRouteMatch('/')
     return (
-        <DatabaseContext.Provider value={new FirebaseService()}>
+        <DatabaseContext.Provider value={FirebaseClass}>
             <Switch>
                 <Route path='/404' component={NotFound} />
                 <Route>

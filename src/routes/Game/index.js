@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from 'react'
 import { useRouteMatch, Switch, Route, useHistory } from 'react-router-dom'
 import { PokemonContext } from '../../context/pokemonContext'
 import { DatabaseContext } from '../../context/databaseContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPokemonsAsync, selectPokemonsData } from '../../store/pokemons'
 
 import StartPage from './Start'
 import BoardPage from './Board'
@@ -16,7 +18,8 @@ const GamePage = () => {
     const [oponetsHand, SetOponetsHand] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
-
+    const pokemonsRedux = useSelector(selectPokemonsData)
+    const dispatch = useDispatch()
     const startGame = () => {
         history.push('/game/board')
     }
@@ -66,7 +69,7 @@ const GamePage = () => {
     }
 
     const resetData = async () => {
-        SetPokemons(await firebase.getPokemonsOnceAsync())
+        dispatch(getPokemonsAsync())
         SetPokemonsSelected({})
         SetGameFinished(false)
         SetPlayerWon(false)
@@ -74,11 +77,11 @@ const GamePage = () => {
     }
 
     useEffect(() => {
-        firebase.getPokemonsSocket((pokes) => {
-            SetPokemons(pokes)
-        })
+        SetPokemons({ ...pokemonsRedux })
+    }, [pokemonsRedux])
+
+    useEffect(() => {
         resetData()
-        return () => firebase.offPokemonsSocket()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
