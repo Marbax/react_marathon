@@ -9,7 +9,10 @@ import StartPage from './Start'
 import BoardPage from './Board'
 import FinishPage from './Finish'
 
+import BackendApiClass from '../../services/backendApi'
+
 const GamePage = () => {
+    //#region Fields
     const firebase = useContext(DatabaseContext)
     const [isGameFinished, SetGameFinished] = useState(false)
     const [isPlayerWon, SetPlayerWon] = useState(false)
@@ -20,9 +23,10 @@ const GamePage = () => {
     const history = useHistory()
     const pokemonsRedux = useSelector(selectPokemonsData)
     const dispatch = useDispatch()
-    const startGame = () => {
-        history.push('/game/board')
-    }
+    //#endregion
+
+    //#region Methods
+    const startGame = () => history.push('/game/board')
 
     const goToFinishPage = () => {
         SetGameFinished(true)
@@ -63,9 +67,8 @@ const GamePage = () => {
     }
 
     const initOponent = async () => {
-        const oponentResp = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
-        const oponentData = await oponentResp.json()
-        SetOponetsHand(oponentData.data.map((item) => ({ ...item, possession: 'red' })))
+        const oponentData = await BackendApiClass.getOponentHandAsync()
+        SetOponetsHand(oponentData.data.map((item) => ({ ...item })))
     }
 
     const resetData = async () => {
@@ -75,6 +78,7 @@ const GamePage = () => {
         SetPlayerWon(false)
         initOponent()
     }
+    //#endregion
 
     useEffect(() => {
         SetPokemons({ ...pokemonsRedux })

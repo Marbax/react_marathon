@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import PokemonCard from '../../../components/PokemonCard'
 import { PokemonContext } from '../../../context/pokemonContext'
+import BackendApiClass from '../../../services/backendApi'
 import ArrowChoice from './component/ArrowChoice'
 import PlayerBoard from './component/PlayerBoard'
 import style from './style.module.css'
@@ -22,18 +23,6 @@ const processPlayersScore = (board, player, oponent) => {
     return [playerScore, oponentScore]
 }
 
-const postMove = async (params) => {
-    const response = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(params),
-    })
-
-    return (await response.json()).data
-}
-
 const BoardPage = () => {
     const history = useHistory()
     const { pokemonsSelected, goToFinishPage, makePlayerWon, oponetsHand } = useContext(PokemonContext)
@@ -43,12 +32,16 @@ const BoardPage = () => {
     const [steps, setSteps] = useState(0)
     const [isPlayerTurn, setIsPlayerTurn] = useState(() => (Math.floor(Math.random() * Math.floor(2)) === 1 ? true : false))
     const [board, SetBoard] = useState([])
+
+    //#region init players hands from context
     const [player, setPlayer] = useState(() => {
-        return Object.values(pokemonsSelected).map((item) => ({ ...item, possession: 'blue' }))
+        return Object.values(pokemonsSelected).map((item) => ({ ...item }))
     })
     const [oponent, setOponent] = useState(() => {
-        return oponetsHand.map((item) => ({ ...item, possession: 'red' }))
+        return oponetsHand.map((item) => ({ ...item }))
     })
+    //#endregion
+
     const [choosenCard, setChoosenCard] = useState(null)
 
     const syncBoard = async () => {
@@ -72,8 +65,10 @@ const BoardPage = () => {
     const handleBoardPlateClick = async (position) => {
         if (choosenCard) {
             updateMoverHand(choosenCard.player, choosenCard.id)
-            SetBoard(await postMove({ position, card: choosenCard, board }))
+            const card = { ...choosenCard }
+            card.possession = isPlayerTurn ? 'blue' : 'red'
             setChoosenCard(null)
+            SetBoard(await BackendApiClass.postMakeTurn({ position, card, board }))
             setSteps((prevState) => {
                 const curStep = prevState + 1
                 return curStep
