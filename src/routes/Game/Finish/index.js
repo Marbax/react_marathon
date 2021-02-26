@@ -48,7 +48,7 @@ const FinishPage = () => {
                 <div className={style['card-container']}>
                     {pokemonsSelected &&
                         Object.values(pokemonsSelected).map(({ id, type, img, name, values, bgImg }) => (
-                            <PokemonCard key={id} id={id} type={type} img={img} name={name} values={values} bgImg={bgImg} isActive className={style['large-card']} />
+                            <PokemonCard key={id} id={id} type={type} img={img} name={name} values={values} bgImg={bgImg} isDisabled isActive className={style['large-card']} />
                         ))}
                 </div>
                 <button className={style['start-button']} disabled={selectedCard == null && isPlayerWon} onClick={handleGameEndClick}>
