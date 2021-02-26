@@ -16,8 +16,7 @@ body {
 
 body {
     color: #252934;
-    /*background: #fafafa;*/
-    background: #252934;
+    background: #fafafa;
     font-size: 62.5%;
     font-family: 'Overlock', Arial, Helvetica, sans-serif;
     overflow-x: hidden;
@@ -33,5 +32,5 @@ a:visited {
 
 a:hover,
 a:active {
-    color: #f300b4;
+    color: orange;
 }
