@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
+import Pokemon from '../models/Pokemon'
 
 const firebaseConfig = {
     apiKey: 'AIzaSyASlp4cZJVb8_WdhrE6PJKgUy_ghYNjo2A',
@@ -18,6 +19,8 @@ class FirebaseService {
         this.database = this.fire.database()
     }
 
+    normalizePokemon = (poke) => new Pokemon({ ...poke })
+
     getPokemonsSocket = (cb) => {
         this.database.ref('pokemons').on('value', (snapshot) => cb(snapshot.val()))
     }
@@ -34,14 +37,14 @@ class FirebaseService {
     }
 
     updatePokemon = (key, poke) => {
-        this.database.ref(`pokemons/${key}`).set(poke)
+        this.database.ref(`pokemons/${key}`).set(this.normalizePokemon(poke))
     }
 
     addPokemon = (poke, cb) => {
         const newPostKey = this.database.ref().child('pokemons').push().key
         this.database
             .ref(`pokemons/${newPostKey}`)
-            .set(poke)
+            .set(this.normalizePokemon(poke))
             .then(() => {
                 cb && cb()
             })
