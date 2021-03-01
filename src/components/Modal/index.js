@@ -24,7 +24,9 @@ const Modal = ({ title, children, clickCloseModal, isOpen }) => {
                 <div ref={modalEl} className={style.modal}>
                     <div className={style.head}>
                         {title}
-                        <span onClick={clickCloseModal && clickCloseModal} className={style.btnClose}></span>
+                        <span
+                            onClick={clickCloseModal && clickCloseModal}
+                            className={style.btnClose}></span>
                     </div>
                     <div className={style.content}>{children}</div>
                 </div>
