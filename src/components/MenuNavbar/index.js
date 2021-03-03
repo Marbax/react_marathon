@@ -34,11 +34,14 @@ const MenuNavbar = ({ bgActive }) => {
         if (data.hasOwnProperty('error')) {
             NotificationManager.error(data?.error?.message, 'Oops...')
         } else {
+            if (isLoginForm) {
+                localStorage.setItem('idToken', data.idToken)
+                localStorage.setItem('email', data.email)
+            }
             NotificationManager.success(
                 `${data?.email} successfully ${isLoginForm ? 'logined' : 'registered'}.`,
                 'Gotcha'
             )
-            console.log(data)
         }
     }
     const handleChangeFormState = () => setLoginForm((prevState) => !prevState)
