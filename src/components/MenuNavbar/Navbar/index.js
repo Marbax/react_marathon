@@ -14,9 +14,11 @@ const Navbar = ({ handleBurgerClick, onClickLogin, isMenuActive, isBgActive = fa
                 </span>
                 <span className={style.btns}>
                     <span className={style['login-btn']} onClick={onClickLogin}>
-                        <LoginSVG />
+                        {localStorage.getItem('email') ?? <LoginSVG />}
                     </span>
-                    <span onClick={handleBurgerClick} className={cn(style['menu-button'], { [style.active]: isMenuActive })}>
+                    <span
+                        onClick={handleBurgerClick}
+                        className={cn(style['menu-button'], { [style.active]: isMenuActive })}>
                         <span />
                     </span>
                 </span>
