@@ -1,7 +1,15 @@
 import cn from 'classnames'
 
 import style from './style.module.css'
-const Input = ({ value, label, type = 'text', name, onChange, required = false }) => {
+const Input = ({
+    value,
+    label,
+    type = 'text',
+    name,
+    onChange,
+    required = false,
+    pattern = null,
+}) => {
     return (
         <div className={style.root}>
             <input
@@ -11,6 +19,7 @@ const Input = ({ value, label, type = 'text', name, onChange, required = false }
                 className={cn(style.input, { [style.valid]: value })}
                 name={name}
                 required={required}
+                pattern={pattern}
             />
             <span className={style.highlight}></span>
             <span className={style.bar}></span>
