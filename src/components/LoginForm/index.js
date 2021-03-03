@@ -3,7 +3,7 @@ import Input from '../Input'
 
 import style from './style.module.css'
 
-const LoginForm = ({ onSubmit, onChangeFormState, login = true, isActive = false }) => {
+const LoginForm = ({ onSubmit, onChangeFormState, isLoginForm = true, isActive = false }) => {
     const emailRegEx = '[A-Za-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
     const passwordRegEx = '[A-Za-z0-9._%+-]{6,16}$'
     const formEl = useRef()
@@ -47,9 +47,11 @@ const LoginForm = ({ onSubmit, onChangeFormState, login = true, isActive = false
                 label={'Password'}
             />
             <div className={style['btn-container']}>
-                <button className={style['submit-button']}>{login ? 'Login' : 'Register'}</button>
+                <button className={style['submit-button']}>
+                    {isLoginForm ? 'Login' : 'Register'}
+                </button>
                 <button onClick={handleChangeStateClick} className={style['change-state-btn']}>
-                    {login ? 'Register?' : 'Login?'}
+                    {isLoginForm ? 'Register?' : 'Login?'}
                 </button>
             </div>
         </form>

@@ -57,7 +57,7 @@ const MenuNavbar = ({ bgActive }) => {
                 isOpen={isModalOpen}
                 title={isLoginForm ? 'Login...' : 'Register...'}>
                 <LoginForm
-                    login={isLoginForm}
+                    isLoginForm={isLoginForm}
                     onChangeFormState={handleChangeFormState}
                     onSubmit={handleSubmitLoginForm}
                     isActive={isModalOpen}></LoginForm>
