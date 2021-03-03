@@ -1,5 +1,6 @@
 import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
 import { NotificationContainer } from 'react-notifications'
+import PrivateRoute from './components/PrivateRoute'
 
 import { DatabaseContext } from './context/databaseContext'
 import MenuNavbar from './components/MenuNavbar'
@@ -24,10 +25,8 @@ const App = () => {
                         <Switch>
                             <Route exact path='/' component={HomePage}></Route>
                             <Route path='/home' component={HomePage}></Route>
-                            <Route path='/game'>
-                                <GamePage />
-                            </Route>
-                            <Route path='/about' component={AboutPage} />
+                            <PrivateRoute path='/game' component={GamePage} />
+                            <PrivateRoute path='/about' component={AboutPage} />
                             <Route path='/contact' component={ContactPage} />
                             <Route
                                 render={() => {
