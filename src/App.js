@@ -1,4 +1,5 @@
 import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { NotificationContainer } from 'react-notifications'
 
 import { DatabaseContext } from './context/databaseContext'
 import MenuNavbar from './components/MenuNavbar'
@@ -8,6 +9,8 @@ import AboutPage from './routes/About'
 import ContactPage from './routes/Contact'
 import NotFound from './routes/NotFound'
 import FirebaseClass from './services/firebase'
+
+import 'react-notifications/lib/notifications.css'
 
 const App = () => {
     const isRoot = useRouteMatch('/')
@@ -35,6 +38,7 @@ const App = () => {
                     </main>
                 </Route>
             </Switch>
+            <NotificationContainer />
         </DatabaseContext.Provider>
     )
 }
