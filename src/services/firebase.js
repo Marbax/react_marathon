@@ -2,8 +2,12 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 import Pokemon from '../models/Pokemon'
 
+export const firebaseApiKey = 'AIzaSyASlp4cZJVb8_WdhrE6PJKgUy_ghYNjo2A'
+export const firebaseSignUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseApiKey}`
+export const firebaseSignInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseApiKey}`
+
 const firebaseConfig = {
-    apiKey: 'AIzaSyASlp4cZJVb8_WdhrE6PJKgUy_ghYNjo2A',
+    apiKey: firebaseApiKey,
     authDomain: 'pokemon-game-1f608.firebaseapp.com',
     databaseURL: 'https://pokemon-game-1f608-default-rtdb.europe-west1.firebasedatabase.app',
     projectId: 'pokemon-game-1f608',
