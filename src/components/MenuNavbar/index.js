@@ -43,6 +43,7 @@ const MenuNavbar = ({ bgActive }) => {
                 'Gotcha'
             )
         }
+        handleModalCloseClick()
     }
     const handleChangeFormState = () => setLoginForm((prevState) => !prevState)
 
