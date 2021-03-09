@@ -42,8 +42,8 @@ const MenuNavbar = ({ bgActive }) => {
                 `${data?.email} successfully ${isLoginForm ? 'logined' : 'registered'}.`,
                 'Gotcha'
             )
+            handleModalCloseClick()
         }
-        handleModalCloseClick()
     }
     const handleChangeFormState = () => setLoginForm((prevState) => !prevState)
 
