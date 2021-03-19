@@ -2,12 +2,17 @@ import { useState, useEffect, useContext } from 'react'
 import { useRouteMatch, Switch, Route, useHistory } from 'react-router-dom'
 import { PokemonContext } from '../../context/pokemonContext'
 import { DatabaseContext } from '../../context/databaseContext'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPokemonsAsync, selectPokemonsData } from '../../store/pokemons'
 
 import StartPage from './Start'
 import BoardPage from './Board'
 import FinishPage from './Finish'
 
+import BackendApiClass from '../../services/backendApi'
+
 const GamePage = () => {
+    //#region Fields
     const firebase = useContext(DatabaseContext)
     const [isGameFinished, SetGameFinished] = useState(false)
     const [isPlayerWon, SetPlayerWon] = useState(false)
@@ -16,10 +21,12 @@ const GamePage = () => {
     const [oponetsHand, SetOponetsHand] = useState([])
     const match = useRouteMatch()
     const history = useHistory()
+    const pokemonsRedux = useSelector(selectPokemonsData)
+    const dispatch = useDispatch()
+    //#endregion
 
-    const startGame = () => {
-        history.push('/game/board')
-    }
+    //#region Methods
+    const startGame = () => history.push('/game/board')
 
     const goToFinishPage = () => {
         SetGameFinished(true)
@@ -60,25 +67,25 @@ const GamePage = () => {
     }
 
     const initOponent = async () => {
-        const oponentResp = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
-        const oponentData = await oponentResp.json()
-        SetOponetsHand(oponentData.data.map((item) => ({ ...item, possession: 'red' })))
+        const oponentData = await BackendApiClass.getOponentHandAsync()
+        SetOponetsHand(oponentData.data.map((item) => ({ ...item })))
     }
 
     const resetData = async () => {
-        SetPokemons(await firebase.getPokemonsOnceAsync())
+        dispatch(getPokemonsAsync())
         SetPokemonsSelected({})
         SetGameFinished(false)
         SetPlayerWon(false)
         initOponent()
     }
+    //#endregion
 
     useEffect(() => {
-        firebase.getPokemonsSocket((pokes) => {
-            SetPokemons(pokes)
-        })
+        SetPokemons({ ...pokemonsRedux })
+    }, [pokemonsRedux])
+
+    useEffect(() => {
         resetData()
-        return () => firebase.offPokemonsSocket()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

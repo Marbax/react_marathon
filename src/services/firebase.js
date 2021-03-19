@@ -1,8 +1,13 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
+import Pokemon from '../models/Pokemon'
+
+export const firebaseApiKey = 'AIzaSyASlp4cZJVb8_WdhrE6PJKgUy_ghYNjo2A'
+export const firebaseSignUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${firebaseApiKey}`
+export const firebaseSignInUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseApiKey}`
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyASlp4cZJVb8_WdhrE6PJKgUy_ghYNjo2A',
+    apiKey: firebaseApiKey,
     authDomain: 'pokemon-game-1f608.firebaseapp.com',
     databaseURL: 'https://pokemon-game-1f608-default-rtdb.europe-west1.firebasedatabase.app',
     projectId: 'pokemon-game-1f608',
@@ -17,6 +22,8 @@ class FirebaseService {
         this.fire = firebase
         this.database = this.fire.database()
     }
+
+    normalizePokemon = (poke) => new Pokemon({ ...poke })
 
     getPokemonsSocket = (cb) => {
         this.database.ref('pokemons').on('value', (snapshot) => cb(snapshot.val()))
@@ -34,18 +41,20 @@ class FirebaseService {
     }
 
     updatePokemon = (key, poke) => {
-        this.database.ref(`pokemons/${key}`).set(poke)
+        this.database.ref(`pokemons/${key}`).set(this.normalizePokemon(poke))
     }
 
     addPokemon = (poke, cb) => {
         const newPostKey = this.database.ref().child('pokemons').push().key
         this.database
             .ref(`pokemons/${newPostKey}`)
-            .set(poke)
+            .set(this.normalizePokemon(poke))
             .then(() => {
                 cb && cb()
             })
     }
 }
 
-export default FirebaseService
+const FirebaseClass = new FirebaseService()
+
+export default FirebaseClass

@@ -7,8 +7,12 @@ import LayoutBg from '../../../assets/bgSleepingPika.jpg'
 import style from './style.module.css'
 import { PokemonContext } from '../../../context/pokemonContext'
 import PokeballLoader from '../../../components/PokeballLoader'
+import { useSelector } from 'react-redux'
+import { selectPokemonsLoading } from '../../../store/pokemons'
 
 const GamePage = () => {
+    const isLoading = useSelector(selectPokemonsLoading)
+
     const { startGame, selectPokemon, pokemonsSelected, pokemons } = useContext(PokemonContext)
 
     const handleGameStartClick = () => {
@@ -21,12 +25,12 @@ const GamePage = () => {
 
     return (
         <>
-            <Layout urlBg={LayoutBg} title={'Choose your cards'}>
+            <Layout urlBg={LayoutBg} title={'Choose your cards'} isPololygonDisabled={true}>
                 <button className={style['start-button']} disabled={Object.keys(pokemonsSelected).length < 5} onClick={handleGameStartClick}>
                     Start Game
                 </button>
                 <div className={style['card-container']}>
-                    {Object.entries(pokemons).length > 0 ? (
+                    {!isLoading ? (
                         Object.entries(pokemons).map(([key, { id, type, img, name, values, bgImg, isSelected }]) => (
                             <PokemonCard
                                 key={key}
