@@ -10,6 +10,7 @@ import BoardPage from './Board'
 import FinishPage from './Finish'
 
 import BackendApiClass from '../../services/backendApi'
+import { selectLocalId } from '../../store/user'
 
 const GamePage = () => {
     //#region Fields
@@ -22,6 +23,7 @@ const GamePage = () => {
     const match = useRouteMatch()
     const history = useHistory()
     const pokemonsRedux = useSelector(selectPokemonsData)
+    const localId = useSelector(selectLocalId)
     const dispatch = useDispatch()
     //#endregion
 
@@ -59,7 +61,7 @@ const GamePage = () => {
     }
 
     const endGame = (card) => {
-        card && firebase.addPokemon({ ...card })
+        card && firebase.addPokemon(localId, localStorage.getItem('idToken'), { ...card })
         history.replace('/game')
         resetData()
     }
