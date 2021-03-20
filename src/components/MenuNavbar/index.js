@@ -4,10 +4,11 @@ import LoginForm from '../LoginForm'
 import Modal from '../Modal'
 import { NotificationManager } from 'react-notifications'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeUserAsync, selectUser, getUserAsync } from '../../store/user'
+import { selectUser, getUserAsync } from '../../store/user'
 import BackendApiClass from '../../services/backendApi'
 import Menu from './Menu'
 import Navbar from './Navbar'
+import UserProfle from '../UserProfile'
 
 const MenuNavbar = ({ bgActive }) => {
     const [isMenuActive, setMenuActive] = useState(null)
@@ -78,13 +79,11 @@ const MenuNavbar = ({ bgActive }) => {
                     clickCloseModal={handleModalCloseClick}
                     isOpen={isModalOpen}
                     title={`Welcome ${user.email}`}>
-                    <div style={{fontSize:'1.1rem'}}>
-                        <div >
-                            <label style={{fontWeight:'bold'}}>Last logined At: </label>
-                            <p>{new Date(parseInt(user?.lastLoginAt))?.toString()}</p>
-                        </div>
-                        <button style={{margin:'1rem 0',padding:'.1rem 1rem'}} onClick={() => dispatch(removeUserAsync())}>Logout</button>
-                    </div>
+                    <UserProfle
+                        lastLoginAt={user.lastLoginAt}
+                        createdAt={user.createdAt}
+                        emailVerified={user.emailVerified}
+                    />
                 </Modal>
             ) : (
                 <Modal
