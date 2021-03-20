@@ -34,7 +34,7 @@ export const selectPokemonsData = (state) => state.pokemons.data
 export const selectPokemonsLoading = (state) => state.pokemons.isLoading
 
 export const getPokemonsAsync = () => async (dispatch, getState) => {
-    const localId = await selectLocalId(getState())
+    const localId = selectLocalId(getState())
     dispatch(fetchPokemons())
     const resp = await fetch(`${firebaseUrl}${localId}/pokemons.json`)
     const data = await resp.json()
