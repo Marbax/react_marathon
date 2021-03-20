@@ -50,7 +50,7 @@ class FirebaseService {
     addPokemon = async (userid, tokenId, card, cb) => {
         await fetch(`${firebaseUrl}${userid}/pokemons.json?auth=${tokenId}`, {
             method: 'POST',
-            body: JSON.stringify(card),
+            body: JSON.stringify(new Pokemon({ ...card })),
         })
         cb && cb()
     }
@@ -59,7 +59,7 @@ class FirebaseService {
         for (const card of cards) {
             await fetch(`${firebaseUrl}${userid}/pokemons.json?auth=${tokenId}`, {
                 method: 'POST',
-                body: JSON.stringify(card),
+                body: JSON.stringify(new Pokemon({ ...card })),
             })
         }
     }
