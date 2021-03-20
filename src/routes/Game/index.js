@@ -38,7 +38,13 @@ const GamePage = () => {
             const pokemon = { ...pokemons[outerKey] }
 
             SetPokemons((prevState) => {
-                return { ...prevState, [outerKey]: { ...prevState[outerKey], isSelected: !prevState[outerKey].isSelected } }
+                return {
+                    ...prevState,
+                    [outerKey]: {
+                        ...prevState[outerKey],
+                        isSelected: !prevState[outerKey].isSelected,
+                    },
+                }
             })
 
             SetPokemonsSelected((prevState) => {
@@ -53,11 +59,7 @@ const GamePage = () => {
     }
 
     const endGame = (card) => {
-        if (card) {
-            const pokeToAdd = { ...card }
-            delete pokeToAdd.isSelected
-            firebase.addPokemon(pokeToAdd)
-        }
+        card && firebase.addPokemon({ ...card })
         history.replace('/game')
         resetData()
     }
@@ -90,7 +92,19 @@ const GamePage = () => {
     }, [])
 
     return (
-        <PokemonContext.Provider value={{ pokemons, pokemonsSelected, oponetsHand, isGameFinished, isPlayerWon, goToFinishPage, endGame, makePlayerWon, selectPokemon, startGame }}>
+        <PokemonContext.Provider
+            value={{
+                pokemons,
+                pokemonsSelected,
+                oponetsHand,
+                isGameFinished,
+                isPlayerWon,
+                goToFinishPage,
+                endGame,
+                makePlayerWon,
+                selectPokemon,
+                startGame,
+            }}>
             <Switch>
                 <Route exact path={`${match.path}/`} component={StartPage} />
                 <Route path={`${match.path}/board`} component={BoardPage} />
